@@ -217,7 +217,7 @@ int dificuldade(){
 				printf("\n\t             Béééé  ");
 				funcKbhit();
 				if(player.tecla == 13){
-					mapa.dificuldade = 400000;
+					mapa.dificuldade = 200000;
 					system("cls");
 					loading();
 					return 0;
@@ -229,7 +229,7 @@ int dificuldade(){
 				printf("\n\t             Béééé  ");
 				funcKbhit();
 				if(player.tecla == 13){
-					mapa.dificuldade = 200000;
+					mapa.dificuldade = 150000;
 					system("cls");
 					loading();
 					return 0;
@@ -427,6 +427,7 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 			case 0:
 			case 1:
 			case 2:
+			case 3:
 				if(player.pos_i < fantasma[nav].pos_i){
 					if(mapa.vet_mapa[pos_i-1][pos_j] != '|'){
 						fantasma[nav].pos_i--;
@@ -486,8 +487,8 @@ void gamePlay(){
 	player.simbolo = 67, player.pos_i = 1, player.pos_j = 2, player.nav = 0, player.pontos = 0, player.m_pontos = 0;
 	fantasma[0].simbolo = 35,fantasma[0].pos_i = 6, fantasma[0].pos_j = 9, fantasma[0].nav = 0, fantasma[0].ia = 4;
 	fantasma[1].simbolo = 36,fantasma[1].pos_i = 6, fantasma[1].pos_j = 10, fantasma[1].nav = 1, fantasma[1].ia = 4;
-	fantasma[2].simbolo = 37,fantasma[2].pos_i = 7, fantasma[2].pos_j = 9, fantasma[2].nav = 2, fantasma[2].ia = 4;
-	fantasma[3].simbolo = 38,fantasma[3].pos_i = 7, fantasma[3].pos_j = 10, fantasma[3].nav = 3, fantasma[3].ia = 5;
+	fantasma[2].simbolo = 37,fantasma[2].pos_i = 7, fantasma[2].pos_j = 9, fantasma[2].nav = 2, fantasma[2].ia = 5;
+	fantasma[3].simbolo = 38,fantasma[3].pos_i = 7, fantasma[3].pos_j = 10, fantasma[3].nav = 3, fantasma[3].ia = 6;
 	
 	loading();
 	
@@ -703,7 +704,7 @@ int telaInicial(){
 
 int main(){
 	int i;
-	mapa.dificuldade = 350000;
+	mapa.dificuldade = 200000;
 	// Procedimentos Gerais
 	esconderCursor();
 	tempoRandom();
