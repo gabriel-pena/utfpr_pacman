@@ -125,17 +125,17 @@ void loading(){
 
 // Opções da telaInicial()
 int opcoesMenu(char tecla, int nav){
-	char dificuldade[7];
+	char dificuldade[10];
 	linha();
 	switch(mapa.dificuldade){
-		case 350000:
+		case 200000:
 			strcpy(dificuldade, "Fácil");
 			break;
-		case 200000:
+		case 150000:
 			strcpy(dificuldade, "Médio");
 			break;
 		case 100000:
-		strcpy(dificuldade, "Béééé");
+			strcpy(dificuldade, "Béééé");
 	}
 	switch(nav){
 		case 0:
