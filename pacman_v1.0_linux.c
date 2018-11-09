@@ -227,7 +227,7 @@ void instrucoes(){
 	wprintf(L"\t   Coma todas as bolinhas sobre o \n\t   tabuleiro.\n");
 	wprintf(L"\n\t   Não deixe que os fantasmas o \n\t   toquem!");
 	linha();
-	wprintf(L"\n\n Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\n Pressione tecla Enter para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -316,7 +316,7 @@ void pontuacao(int pontos){
 		player.m_pontos = player.pontos - 20;
 	}
 	wprintf(L"\n\t     Pontuação Máxima: %d", player.m_pontos);
-	wprintf(L"\n\n   Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\n   Pressione tecla Enter para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -335,7 +335,7 @@ void creditos(){
 	wprintf(L"\n\t\t- VERSÃO LINUX -");
 	linha();
 	wprintf(L"\n\t   Gabriel Pena");
-	wprintf(L"\n\n Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\n Pressione tecla Enter para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -377,7 +377,7 @@ void vocePerdeu(){
 	loading();
 	artePac();
 	wprintf(L"\n\t\tVocê perdeu!");
-	wprintf(L"\n\n Pressione qualquer tecla para continuar...");
+	wprintf(L"\n\n Pressione tecla Enter para continuar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -392,7 +392,7 @@ void voceGanhou(){
 	artePac();
 	artePac();
 	wprintf(L"\n\t   Parabéns! Você ganhou!");
-	wprintf(L"\n\n Pressione qualquer tecla para continuar...");
+	wprintf(L"\n\n Pressione tecla Enter para continuar...");
 	pausar_jogo();
 	system("clear");
 	loading();
