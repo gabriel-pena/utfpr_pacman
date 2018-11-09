@@ -119,6 +119,7 @@ void loading(){
 		wprintf(L". ");
 		usleep(200000);
 	}
+	wprintf(L"\n");
 	system("clear");
 }
 
@@ -296,6 +297,7 @@ int dificuldade(){
 				}
 				break;
 		}
+		wprintf(L"\n");
 		usleep(200000);
 		limpaTela();
 	}while(1);
@@ -344,11 +346,13 @@ void creditos(){
 // Saindo...
 void sair(int cheat){
 	int i;
+	wprintf(L"\n");
 	system("clear");
 	usleep(500000);
 	wprintf(L"\n\n\n\t\t   Saindo");
 	for(i = 0; i < 3; i++){
 		wprintf(L". ");
+		wprintf(L"\n");
 		usleep(500000);
 	}
 	// "Cheat"
@@ -659,6 +663,7 @@ void gamePlay(){
 		} else {
 			player.simbolo = 67;
 		}
+		wprintf(L"\n");
 		usleep(mapa.dificuldade);
 		// Fim Construção Mapa
 
@@ -754,7 +759,7 @@ int telaInicial(){
 		}
 
 		// Fim Controle
-
+		wprintf(L"\n");
 		// Fim Menu
 		usleep(200000);
 		limpaTela();
