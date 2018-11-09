@@ -15,16 +15,25 @@
 #include <locale.h>
 #include <string.h>
 
+#include <sys/io.h>
+#include <fcntl.h>
+#ifndef _O_U16TEXT
+  #define _O_U16TEXT 0x20000
+#endif
+
 #define tempoRandom() srand(time(NULL));
 #define pt_br()  setlocale(LC_ALL,"");
 #define corJogo() system("color f")
-#define limpaTela() printf("\033[H")
-#define linha() printf("\n---------------------------------------------")
+#define limpaTela() wprintf(L"\033[H")
+#define linha() wprintf(L"\n---------------------------------------------")
 
-int bolinha = 43;
+wchar_t bolinha[] = L"\u2022";
+wchar_t pac_a[] = L"C";
+wchar_t pac_f[] = L"O";
+wchar_t espaco[] = L" ";
 
 struct Mapa{
-	char vet_mapa[13][20], vet_pontos[13][20];
+	wchar_t *vet_mapa[13][20], vet_pontos[13][20];
 	int dificuldade;
 }mapa;
 
@@ -92,22 +101,22 @@ void pausar_jogo(){
 
 // Arte Pac
 void artePac(){
-	printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n");
-	printf("    _ __   __ _  ___ _ __ ___   __ _ _ __     \n");
-	printf("   | '_ \\ / _  |/ __| '_ ` _ \\ / _` | '_ \\ \n");
-	printf("   | |_) | (_| | (__| | | | | | (_| | | | |   \n");
-	printf("   | .__/ \\__._|\\___|_| |_| |_|\\__,_|_| |_|\n");
-	printf("   | |                                        \n");
-	printf("   |_|                                        \n");
-	printf("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n");
+	wprintf(L"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n");
+	wprintf(L"    _ __   __ _  ___ _ __ ___   __ _ _ __     \n");
+	wprintf(L"   | '_ \\ / _  |/ __| '_ ` _ \\ / _` | '_ \\ \n");
+	wprintf(L"   | |_) | (_| | (__| | | | | | (_| | | | |   \n");
+	wprintf(L"   | .__/ \\__._|\\___|_| |_| |_|\\__,_|_| |_|\n");
+	wprintf(L"   | |                                        \n");
+	wprintf(L"   |_|                                        \n");
+	wprintf(L"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= \n");
 }
 
 // Efeito de Loading
 void loading(){
 	int i;
-	printf("\n\n\n\n\n\n\n\t\t   ");
+	wprintf(L"\n\n\n\n\n\n\n\t\t   ");
 	for(i = 0; i < 3 ; i++){
-		printf(". ");
+		wprintf(L". ");
 		usleep(200000);
 	}
 	system("clear");
@@ -129,79 +138,79 @@ int opcoesMenu(char tecla, int nav){
 	}
 	switch(nav){
 		case 0:
-			printf("\n\t      >  Iniciar       ");
-			printf("\n\t          Instruções   ");
-			printf("\n\t          Dificuldade  ");
-			printf("\n\t          Pontuação    ");
-			printf("\n\t          Créditos     ");
-			printf("\n\t          Sair         ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t      >  Iniciar       ");
+			wprintf(L"\n\t          Instruções   ");
+			wprintf(L"\n\t          Dificuldade  ");
+			wprintf(L"\n\t          Pontuação    ");
+			wprintf(L"\n\t          Créditos     ");
+			wprintf(L"\n\t          Sair         ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 0;
 			}
 			break;
 		case 1:
-			printf("\n\t          Iniciar         ");
-			printf("\n\t      >  Instruções       ");
-			printf("\n\t          Dificuldade     ");
-			printf("\n\t          Pontuação       ");
-			printf("\n\t          Créditos        ");
-			printf("\n\t          Sair         ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t          Iniciar         ");
+			wprintf(L"\n\t      >  Instruções       ");
+			wprintf(L"\n\t          Dificuldade     ");
+			wprintf(L"\n\t          Pontuação       ");
+			wprintf(L"\n\t          Créditos        ");
+			wprintf(L"\n\t          Sair         ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 1;
 			}
 			break;
 		case 2:
-			printf("\n\t          Iniciar         ");
-			printf("\n\t          Instruções      ");
-			printf("\n\t      >  Dificuldade      ");
-			printf("\n\t          Pontuação       ");
-			printf("\n\t          Créditos        ");
-			printf("\n\t          Sair         ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t          Iniciar         ");
+			wprintf(L"\n\t          Instruções      ");
+			wprintf(L"\n\t      >  Dificuldade      ");
+			wprintf(L"\n\t          Pontuação       ");
+			wprintf(L"\n\t          Créditos        ");
+			wprintf(L"\n\t          Sair         ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 2;
 			}
 			break;
 		case 3:
-			printf("\n\t          Iniciar         ");
-			printf("\n\t          Instruções      ");
-			printf("\n\t          Dificuldade     ");
-			printf("\n\t      >  Pontuação        ");
-			printf("\n\t          Créditos        ");
-			printf("\n\t          Sair         ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t          Iniciar         ");
+			wprintf(L"\n\t          Instruções      ");
+			wprintf(L"\n\t          Dificuldade     ");
+			wprintf(L"\n\t      >  Pontuação        ");
+			wprintf(L"\n\t          Créditos        ");
+			wprintf(L"\n\t          Sair         ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 3;
 			}
 			break;
 		case 4:
-			printf("\n\t          Iniciar         ");
-			printf("\n\t          Instrucões      ");
-			printf("\n\t          Dificuldade     ");
-			printf("\n\t          Pontuação       ");
-			printf("\n\t      >  Créditos         ");
-			printf("\n\t          Sair         ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t          Iniciar         ");
+			wprintf(L"\n\t          Instrucões      ");
+			wprintf(L"\n\t          Dificuldade     ");
+			wprintf(L"\n\t          Pontuação       ");
+			wprintf(L"\n\t      >  Créditos         ");
+			wprintf(L"\n\t          Sair         ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 4;
 			}
 			break;
 		case 5:
-			printf("\n\t          Iniciar         ");
-			printf("\n\t          Instrucões      ");
-			printf("\n\t          Dificuldade     ");
-			printf("\n\t          Pontuação       ");
-			printf("\n\t          Créditos        ");
-			printf("\n\t      >  Sair             ");
-			printf("\n\t\t\t\tNível: %s", dificuldade);
+			wprintf(L"\n\t          Iniciar         ");
+			wprintf(L"\n\t          Instrucões      ");
+			wprintf(L"\n\t          Dificuldade     ");
+			wprintf(L"\n\t          Pontuação       ");
+			wprintf(L"\n\t          Créditos        ");
+			wprintf(L"\n\t      >  Sair             ");
+			wprintf(L"\n\t\t\t\tNível: %s", dificuldade);
 			if(tecla == '\n'){
 				return 5;
 			}
 		}
 		linha();
-		printf("\n\t          Versão 1.0          ");
+		wprintf(L"\n\t          Versão 1.0          ");
 }
 
 // Tela de Instruções
@@ -209,16 +218,16 @@ void instrucoes(){
 	system("clear");
 	loading();
 	artePac();
-	printf("\t\t- INSTRUÇÕES -");
+	wprintf(L"\t\t- INSTRUÇÕES -");
 	linha();
-	printf("\n Controle:\n");
-	printf("\t   [W] Cima\t [A] Esquerda\n\t   [S] Baixo\t [D] Direita");
+	wprintf(L"\n Controle:\n");
+	wprintf(L"\t   [W] Cima\t [A] Esquerda\n\t   [S] Baixo\t [D] Direita");
 	linha();
-	printf("\n Objetivo: \n");
-	printf("\t   Coma todas as bolinhas sobre o \n\t   tabuleiro.\n");
-	printf("\n\t   Não deixe que os fantasmas o \n\t   toquem!");
+	wprintf(L"\n Objetivo: \n");
+	wprintf(L"\t   Coma todas as bolinhas sobre o \n\t   tabuleiro.\n");
+	wprintf(L"\n\t   Não deixe que os fantasmas o \n\t   toquem!");
 	linha();
-	printf("\n\n Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\n Pressione qualquer tecla para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -233,7 +242,7 @@ int dificuldade(){
 		player.tecla = ' ';
 	do{
 		artePac();
-		printf("\t\t- DIFICULDADE -");
+		wprintf(L"\t\t- DIFICULDADE -");
 		linha();
 		funcKbhit();
 		switch(player.tecla){
@@ -251,9 +260,9 @@ int dificuldade(){
 		}
 		switch(player.nav){
 			case 0:
-				printf("\n\t         >  Fácil     ");
-				printf("\n\t             Médio    ");
-				printf("\n\t             Béééé  ");
+				wprintf(L"\n\t         >  Fácil     ");
+				wprintf(L"\n\t             Médio    ");
+				wprintf(L"\n\t             Béééé  ");
 				funcKbhit();
 				if(player.tecla == '\n'){
 					mapa.dificuldade = 200000;
@@ -263,9 +272,9 @@ int dificuldade(){
 				}
 				break;
 			case 1:
-				printf("\n\t             Fácil    ");
-				printf("\n\t         >  Médio     ");
-				printf("\n\t             Béééé  ");
+				wprintf(L"\n\t             Fácil    ");
+				wprintf(L"\n\t         >  Médio     ");
+				wprintf(L"\n\t             Béééé  ");
 				funcKbhit();
 				if(player.tecla == '\n'){
 					mapa.dificuldade = 150000;
@@ -275,9 +284,9 @@ int dificuldade(){
 				}
 				break;
 			case 2:
-				printf("\n\t             Fácil    ");
-				printf("\n\t             Médio    ");
-				printf("\n\t         >  Béééé     ");
+				wprintf(L"\n\t             Fácil    ");
+				wprintf(L"\n\t             Médio    ");
+				wprintf(L"\n\t         >  Béééé     ");
 				funcKbhit();
 				if(player.tecla == '\n'){
 					mapa.dificuldade = 100000;
@@ -301,13 +310,13 @@ void pontuacao(int pontos){
 	system("clear");
 	loading();
 	artePac();
-	printf("\t\t- PONTUAÇÃO -");
+	wprintf(L"\t\t- PONTUAÇÃO -");
 	linha();
 	if(player.pontos > player.m_pontos){
 		player.m_pontos = player.pontos - 20;
 	}
-	printf("\n\t     Pontuação Máxima: %d", player.m_pontos);
-	printf("\n\n   Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\t     Pontuação Máxima: %d", player.m_pontos);
+	wprintf(L"\n\n   Pressione qualquer tecla para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -318,15 +327,15 @@ void creditos(){
 	system("clear");
 	loading();
 	artePac();
-	printf("\t\t- CRÉDITOS -");
+	wprintf(L"\t\t- CRÉDITOS -");
 	linha();
-	printf("\n\t   Cesar Mauricio Chauchuty");
-	printf("\n\t   Gabriel Da Cruz Rakovicz");
+	wprintf(L"\n\t   Cesar Mauricio Chauchuty");
+	wprintf(L"\n\t   Gabriel Da Cruz Rakovicz");
 	linha();
-	printf("\n\t\t- VERSÃO LINUX -");
+	wprintf(L"\n\t\t- VERSÃO LINUX -");
 	linha();
-	printf("\n\t   Gabriel Pena");
-	printf("\n\n Pressione qualquer tecla para voltar...");
+	wprintf(L"\n\t   Gabriel Pena");
+	wprintf(L"\n\n Pressione qualquer tecla para voltar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -337,26 +346,26 @@ void sair(int cheat){
 	int i;
 	system("clear");
 	usleep(500000);
-	printf("\n\n\n\t\t   Saindo");
+	wprintf(L"\n\n\n\t\t   Saindo");
 	for(i = 0; i < 3; i++){
-		printf(". ");
+		wprintf(L". ");
 		usleep(500000);
 	}
 	// "Cheat"
 	if(cheat == 1){
-		printf("\n\n");
-		printf("\t  Béééééé!!!                            ");
-		printf("\n                  _.-..                 ");
-		printf("\n                ,'9 )\\)`-.,.--.        ");
-		printf("\n                `-.|           `.       ");
-		printf("\n                   \\,      ,    \\)    ");
-		printf("\n                    `.  )._\\   (\\     ");
-		printf("\n                      |//   `-,//       ");
-		printf("\n                      ]||    //""       ");
-		printf("\n                      ""    ""          ");
+		wprintf(L"\n\n");
+		wprintf(L"\t  Béééééé!!!                            ");
+		wprintf(L"\n                  _.-..                 ");
+		wprintf(L"\n                ,'9 )\\)`-.,.--.        ");
+		wprintf(L"\n                `-.|           `.       ");
+		wprintf(L"\n                   \\,      ,    \\)    ");
+		wprintf(L"\n                    `.  )._\\   (\\     ");
+		wprintf(L"\n                      |//   `-,//       ");
+		wprintf(L"\n                      ]||    //""       ");
+		wprintf(L"\n                      ""    ""          ");
 		sleep(2);
 	}
-	printf("\n\n");
+	wprintf(L"\n\n");
 	sleep(1);
 	exit(0);
 }
@@ -367,8 +376,8 @@ void vocePerdeu(){
 	system("clear");
 	loading();
 	artePac();
-	printf("\n\t\tVocê perdeu!");
-	printf("\n\n Pressione qualquer tecla para continuar...");
+	wprintf(L"\n\t\tVocê perdeu!");
+	wprintf(L"\n\n Pressione qualquer tecla para continuar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -381,8 +390,9 @@ void voceGanhou(){
 	system("clear");
 	loading();
 	artePac();
-	printf("\n\t   Parabéns! Você ganhou!");
-	printf("\n\n Pressione qualquer tecla para continuar...");
+	artePac();
+	wprintf(L"\n\t   Parabéns! Você ganhou!");
+	wprintf(L"\n\n Pressione qualquer tecla para continuar...");
 	pausar_jogo();
 	system("clear");
 	loading();
@@ -399,7 +409,7 @@ void voceGanhou(){
 void controle(int pos_i, int pos_j, int tam_i, int tam_j){
 	switch(player.tecla){
 			case 'w':
-				if(mapa.vet_mapa[pos_i-1][pos_j] == '|'){
+				if(mapa.vet_mapa[pos_i-1][pos_j] == L"|"){
 					break;
 				}
 				if(player.pos_i != 0){
@@ -408,7 +418,7 @@ void controle(int pos_i, int pos_j, int tam_i, int tam_j){
 
 				break;
 			case 's':
-				if(mapa.vet_mapa[pos_i+1][pos_j] == '|'){
+				if(mapa.vet_mapa[pos_i+1][pos_j] == L"|"){
 					break;
 				}
 				if(player.pos_i != tam_i){
@@ -416,7 +426,7 @@ void controle(int pos_i, int pos_j, int tam_i, int tam_j){
 				}
 				break;
 			case 'a':
-				if(mapa.vet_mapa[pos_i][pos_j-1] == '|'){
+				if(mapa.vet_mapa[pos_i][pos_j-1] == L"|"){
 					break;
 				}
 				if(player.pos_j != 0){
@@ -424,7 +434,7 @@ void controle(int pos_i, int pos_j, int tam_i, int tam_j){
 				}
 				break;
 			case 'd':
-				if(mapa.vet_mapa[pos_i][pos_j+1] == '|'){
+				if(mapa.vet_mapa[pos_i][pos_j+1] == L"|"){
 					break;
 				}
 				if(player.pos_j != tam_j){
@@ -443,22 +453,22 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 		case 1:
 			switch(rand() % ia){
 				case 0:
-					if(mapa.vet_mapa[pos_i+1][pos_j] != '|' && pos_i != tam_i){
+					if(mapa.vet_mapa[pos_i+1][pos_j] != L"|" && pos_i != tam_i){
 						fantasma[nav].pos_i++;
 					}
 					break;
 				case 1:
-					if(mapa.vet_mapa[pos_i-1][pos_j] != '|' && pos_i != 0){
+					if(mapa.vet_mapa[pos_i-1][pos_j] != L"|" && pos_i != 0){
 						fantasma[nav].pos_i--;
 					}
 					break;
 				case 2:
-					if(mapa.vet_mapa[pos_i][pos_j+1] != '|' && pos_i != tam_j){
+					if(mapa.vet_mapa[pos_i][pos_j+1] != L"|" && pos_i != tam_j){
 						fantasma[nav].pos_j++;
 					}
 					break;
 				case 3:
-					if(mapa.vet_mapa[pos_i][pos_j-1] != '|' && pos_i != 0){
+					if(mapa.vet_mapa[pos_i][pos_j-1] != L"|" && pos_i != 0){
 						fantasma[nav].pos_j--;
 					}
 					break;
@@ -472,7 +482,7 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 			case 2:
 			case 3:
 				if(player.pos_i < fantasma[nav].pos_i){
-					if(mapa.vet_mapa[pos_i-1][pos_j] != '|'){
+					if(mapa.vet_mapa[pos_i-1][pos_j] != L"|"){
 						fantasma[nav].pos_i--;
 					} else {
 						switch(rand() % 2){
@@ -484,7 +494,7 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 						}
 					}
 				} else if(player.pos_j < fantasma[nav].pos_j){
-					if(mapa.vet_mapa[pos_i][pos_j-1] != '|'){
+					if(mapa.vet_mapa[pos_i][pos_j-1] != L"|"){
 						fantasma[nav].pos_j--;
 					} else {
 						switch(rand() % 2){
@@ -496,7 +506,7 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 						}
 					}
 				} else if(player.pos_i > fantasma[nav].pos_i){
-					if(mapa.vet_mapa[pos_i+1][pos_j] != '|'){
+					if(mapa.vet_mapa[pos_i+1][pos_j] != L"|"){
 						fantasma[nav].pos_i++;
 					} else {
 						switch(rand() % 2){
@@ -508,7 +518,7 @@ void fantasma_nav(int nav, int pos_i, int pos_j, int ia, int tam_i, int tam_j){
 						}
 					}
 				} else if(player.pos_j > fantasma[nav].pos_j){
-					if(mapa.vet_mapa[pos_i][pos_j+1] != '|'){
+					if(mapa.vet_mapa[pos_i][pos_j+1] != L"|"){
 						fantasma[nav].pos_j++;
 					} else {
 						switch(rand() % 2){
@@ -567,38 +577,45 @@ void gamePlay(){
 		// Fantasmas
 
 	// Construção Mapa
-		printf(" -------------------------------------\n");
+		wprintf(L" -------------------------------------\n");
 		for(i = 0; i <= tam_i; i++){
 			for(j = 0; j <= tam_j; j++){
 				if(mapa.vet_pontos[i][j] == 'X'){
-					mapa.vet_mapa[i][j] = 32;
+					mapa.vet_mapa[i][j] = L" ";
 				} else {
 
 					if(j == 0){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 3 && (i >= 4 && i <= 8)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 6 && (i >= 3 && i <= 9)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 8 && (i >= 6 && i <= 7)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 11 && (i >= 6 && i <= 7)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 13 && (i >= 3 && i <= 9)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == 16 && (i >= 4 && i <= 8)){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else if(j == tam_j){
-						mapa.vet_mapa[i][j] = '|';
+						mapa.vet_mapa[i][j] = L"|";
 					} else {
-						mapa.vet_mapa[i][j] = bolinha;
+						mapa.vet_mapa[i][j] = L"\u2022";
 					}
 				}
-				mapa.vet_mapa[player.pos_i][player.pos_j] = player.simbolo;
-				mapa.vet_mapa[fantasma[0].pos_i][fantasma[0].pos_j] = fantasma[0].simbolo;
-				mapa.vet_mapa[fantasma[1].pos_i][fantasma[1].pos_j] = fantasma[1].simbolo;
-				mapa.vet_mapa[fantasma[2].pos_i][fantasma[2].pos_j] = fantasma[2].simbolo;
-				mapa.vet_mapa[fantasma[3].pos_i][fantasma[3].pos_j] = fantasma[3].simbolo;
+
+				if(player.simbolo == 67 && player.pontos > 1){
+					mapa.vet_mapa[player.pos_i][player.pos_j] = L"O";
+				} else {
+					mapa.vet_mapa[player.pos_i][player.pos_j] = L"C";
+				}
+
+
+				mapa.vet_mapa[fantasma[0].pos_i][fantasma[0].pos_j] = L"#";
+				mapa.vet_mapa[fantasma[1].pos_i][fantasma[1].pos_j] = L"$";
+				mapa.vet_mapa[fantasma[2].pos_i][fantasma[2].pos_j] = L"%";
+				mapa.vet_mapa[fantasma[3].pos_i][fantasma[3].pos_j] = L"&";
 
 				if(mapa.vet_pontos[player.pos_i][player.pos_j] != 'X'){
 					mapa.vet_pontos[player.pos_i][player.pos_j] = 'X';
@@ -613,9 +630,9 @@ void gamePlay(){
 
 		for(i = 0; i <= tam_i; i++){
 			for(j = 0; j <= tam_j; j++){
-				printf("%c ", mapa.vet_mapa[i][j]);
+				fwprintf(stdout, L"%ls ", mapa.vet_mapa[i][j]);
 			}
-			printf("\n");
+			wprintf(L"\n");
 		}
 
 		if((player.pos_i == fantasma[0].pos_i && player.pos_j == fantasma[0].pos_j)){
@@ -629,11 +646,11 @@ void gamePlay(){
 		}
 
 
-		printf(" -------------------------------------");
+		wprintf(L" -------------------------------------");
 
 		// Pontuação
 
-		printf("\n\t\t\t   Pontos: %04d  ", player.pontos-10);
+		wprintf(L"\n\t\t\t   Pontos: %04d  ", player.pontos-10);
 
 		// Fim Pontuação
 
@@ -649,7 +666,8 @@ void gamePlay(){
 }
 
 int telaInicial(){
-	char   	pac = 67, vet_efeito[23];
+	int pac = 0;
+	wchar_t *vet_efeito[23];
 	int 	i, pos_pac = 0, pontos = 0, cheat = 0;
 	player.tecla = ' ';
 	player.nav = 0;
@@ -661,26 +679,27 @@ int telaInicial(){
 		// Fim Arte Pacman
 
 		// Efeito Pacman
+
 		for(i = 0; i <= 22; i++){
 			if(pos_pac == i){
-				if(pac == 67){
-					pac = 79;
-					vet_efeito[i] = pac;
+				if(pac == 0){
+					pac = 1;
+					vet_efeito[i] = L"O";
 				} else {
-					pac = 67;
-					vet_efeito[i] = pac;
+					pac = 0;
+					vet_efeito[i] =  L"C";
 				}
 			} else{
 				if(i >= pos_pac){
-					vet_efeito[i] = bolinha;
+					vet_efeito[i] = L"\u2022";
 				} else {
-					vet_efeito[pos_pac-1] = 32;
+					vet_efeito[pos_pac-1] = L" ";
 				}
 			}
 		}
 
 		for(i = 0; i <= 21; i++){
-			printf(" %c", vet_efeito[i]);
+		  fwprintf(stdout, L" %ls", vet_efeito[i]);
 		}
 
 		pos_pac++;
@@ -745,9 +764,11 @@ int telaInicial(){
 	return 0;
 }
 
-int main(){
+int main(int argc, char *argv[]){
 	int i;
 	mapa.dificuldade = 200000;
+
+	//_setmode(_fileno(stdout), _O_U16TEXT);
 	// Procedimentos Gerais
 	esconderCursor();
 	tempoRandom();
